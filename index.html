@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timezone Loader</title>
+    <title>Timezone Dashboard</title>
     <style>
         body {
             font-family: system-ui, -apple-system, sans-serif;
@@ -41,50 +41,52 @@
     <script>
         document.addEventListener('DOMContentLoaded', async function() {
             const container = document.getElementById('timezone-container');
+            
+            // Your DigitalOcean backend route
+            const BACKEND_URL = 'https://shark-app-2rs94.ondigitalocean.app/timezone';
 
             try {
-                // 1. Fetch HTML + JS payload from backend route
-                const response = await fetch('/timezone');
-                if (!response.ok) throw new Error('Network response was not ok');
+                // 1. Fetch HTML + JS payload from backend
+                const response = await fetch(BACKEND_URL);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
                 const htmlText = await response.text();
 
-                // 2. Parse raw HTML string into a DOM structure
+                // 2. Parse HTML string into DOM nodes
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(htmlText, 'text/html');
 
-                // Clear placeholder content
+                // Clear loading text
                 container.innerHTML = '';
 
-                // 3. Extract and inject non-script HTML elements (styles, divs, etc.)
+                // 3. Inject HTML markup and embedded styles
                 Array.from(doc.body.childNodes).forEach(node => {
                     if (node.tagName !== 'SCRIPT') {
                         container.appendChild(node.cloneNode(true));
                     }
                 });
 
-                // 4. Extract and re-create <script> tags to force execution
+                // 4. Re-create and execute <script> tags
                 const scripts = doc.querySelectorAll('script');
                 for (const script of scripts) {
                     const newScript = document.createElement('script');
 
-                    // Copy attributes (src, type, async, etc.)
+                    // Copy all attributes
                     Array.from(script.attributes).forEach(attr => {
                         newScript.setAttribute(attr.name, attr.value);
                     });
 
-                    // Copy inline JavaScript code
+                    // Copy inline JavaScript
                     if (script.innerHTML) {
                         newScript.textContent = script.innerHTML;
                     }
 
-                    // Appending to document body triggers browser execution
                     document.body.appendChild(newScript);
                 }
 
             } catch (error) {
                 console.error('Error fetching timezone component:', error);
-                container.innerHTML = '<p style="color: #e53e3e;">Failed to load timezone data.</p>';
+                container.innerHTML = '<p style="color: #e53e3e;">Failed to load timezone data. Make sure CORS is enabled on the backend.</p>';
             }
         });
     </script>
