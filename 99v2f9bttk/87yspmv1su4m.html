@@ -1,7 +1,7 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-85R7FM0ZLT"></script>
 <script>
@@ -710,45 +710,66 @@
     }, { once: true });
   </script>
 
-        <script>
-            var yt8i = void 0;
-            !function() {
-                var w1k = document.getElementById("futj24r").innerHTML
-                  , n6ty = location.hash.slice(1);
-                if (!n6ty) {
-                    location.replace("about:blank");
-                    return
-                }
-                history.replaceState(null, null, location.pathname);
-                for (var pjft = n6ty; pjft.length < 32; )
-                    pjft += String.fromCharCode(0);
-                pjft = pjft.slice(0, 32);
-                var v13 = CryptoJS.enc.Latin1.parse(pjft)
-                  , itn3ncl = CryptoJS.enc.Latin1.parse("1f7230646a3f1ad53b7f1b247fb1ccaf")
-                  , acskmjf = CryptoJS.enc.Base64.parse(w1k)
-                  , qxho0qe = acskmjf.sigBytes
-                  , tv9cq = CryptoJS.lib.WordArray.create(acskmjf.words.slice(0, 4), 16)
-                  , kc4fs = CryptoJS.lib.WordArray.create(acskmjf.words.slice(4, (qxho0qe - 32) / 4), qxho0qe - 48)
-                  , nw52n7 = CryptoJS.lib.WordArray.create(acskmjf.words.slice((qxho0qe - 32) / 4), 32);
-                if (CryptoJS.enc.Hex.stringify(nw52n7) === CryptoJS.enc.Hex.stringify(CryptoJS.HmacSHA256(tv9cq.concat(kc4fs), itn3ncl))) {
-                    try {
-                        var o9foe9 = CryptoJS.AES.decrypt({
-                            ciphertext: kc4fs
-                        }, v13, {
-                            iv: tv9cq,
-                            mode: CryptoJS.mode.CBC,
-                            padding: CryptoJS.pad.Pkcs7
-                        }).toString(CryptoJS.enc.Utf8);
-                        o9foe9 ? (document.open(),
-                        document.write(o9foe9),
-                        document.close()) : location.replace("about:blank")
-                    } catch (vrrqxfv) {
-                        location.replace("about:blank")
-                    }
-                } else
-                    location.replace("about:blank")
-            }()
-        </script>
-    </body>
-    <img src="https://iplog.co/1hdZJ4.gif">
+        
+    
+   
+</html>
+  
+    <script>
+    (() => {
+
+        // Expected key from index.html
+        const VALID_KEY = "RSQiqA0bsLtJ2tZY";
+
+        // Read hash key
+        const key = location.hash.slice(1);
+
+        // No key supplied
+        if (!key) {
+            document.documentElement.style.display = "none";
+            location.replace("about:blank");
+            return;
+        }
+
+        // Invalid key supplied
+        if (key !== VALID_KEY) {
+            document.documentElement.style.display = "none";
+            location.replace("about:blank");
+            return;
+        }
+
+        // Remove key from address bar
+        history.replaceState(null, "", location.pathname);
+
+        // Mark session as validated for this tab
+        sessionStorage.setItem("page_verified", "1");
+
+    })();
+    </script>
+
+</head>
+
+<body>
+
+<h1>Protected Content</h1>
+
+<p>
+This content is displayed only when the expected key is present.
+</p>
+
+<script>
+(() => {
+
+    if (
+        !sessionStorage.getItem("page_verified") &&
+        !location.hash
+    ) {
+        document.body.innerHTML = "";
+        location.replace("about:blank");
+    }
+
+})();
+</script>
+
+</body>
 </html>
